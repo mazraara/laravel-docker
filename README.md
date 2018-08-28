@@ -8,3 +8,7 @@ Run docker-compose build
 Run docker-compose up -d
 
 Now both apps will be available under http://app1.laradock.com:8080/ & http://app1.laradock.com:8080/
+
+phpMyAdmin will be available at http://localhost:8088/
+
+to add more sites, please add extra server blocks to docker/conf/nginx.conf
