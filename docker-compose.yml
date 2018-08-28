@@ -22,7 +22,6 @@ services:
         - app
     links:
         - db
-        - testdb
     ports:
       - 8080:80
 
@@ -38,26 +37,12 @@ services:
     expose:
         - "3306"
     environment:
-        MYSQL_ROOT_PASSWORD: root@user@123
-        MYSQL_DATABASE: DigitaleBoxMaster
-        MYSQL_USER: dbuser
-        MYSQL_PASSWORD: db@user@123
+        MYSQL_ROOT_PASSWORD: root@123
+        MYSQL_DATABASE: Homestead
+        MYSQL_USER: db
+        MYSQL_PASSWORD: db@123
   
-  # The DB Test Server
-  testdb:
-    image: mysql:5.7
-    restart: always
-    ports:
-        - "3307:3306"
-    expose:
-        - "3307"
-    environment:
-        MYSQL_ROOT_PASSWORD: root@user@123test
-        MYSQL_DATABASE: DigitaleBoxMasterTest
-        MYSQL_USER: dbusertest
-        MYSQL_PASSWORD: db@user@123test
-                
-  
+
   # The phpMyAdmin
   phpmyadmin:
     depends_on:
