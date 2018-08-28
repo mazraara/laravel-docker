@@ -1,0 +1,71 @@
+version: '2'
+services:
+
+  # The Application
+  app:
+    build:
+      context: ./
+      dockerfile: docker/app.docker
+    working_dir: /var/www
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/var/www
+
+
+  # The Web Server
+  web:
+    build:
+      context: ./
+      dockerfile: docker/web.docker
+    working_dir: /var/www
+    volumes_from:
+        - app
+    links:
+        - db
+        - testdb
+    ports:
+      - 8080:80
+
+
+  # The DB Server
+  db:
+    image: mysql:5.7
+    volumes:
+        - "./docker/data/db:/var/lib/mysql"
+    restart: always
+    ports:
+        - "3306:3306"
+    expose:
+        - "3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: root@user@123
+        MYSQL_DATABASE: DigitaleBoxMaster
+        MYSQL_USER: dbuser
+        MYSQL_PASSWORD: db@user@123
+  
+  # The DB Test Server
+  testdb:
+    image: mysql:5.7
+    restart: always
+    ports:
+        - "3307:3306"
+    expose:
+        - "3307"
+    environment:
+        MYSQL_ROOT_PASSWORD: root@user@123test
+        MYSQL_DATABASE: DigitaleBoxMasterTest
+        MYSQL_USER: dbusertest
+        MYSQL_PASSWORD: db@user@123test
+                
+  
+  # The phpMyAdmin
+  phpmyadmin:
+    depends_on:
+        - db
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+       - "8088:80"
+    links:
+       - db
+    environment:
+        PMA_HOST: db
